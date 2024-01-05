@@ -63,9 +63,9 @@ def create_new_member(file_path, name):
 def check_new_member(name):
     file_path = f"data/{name}.json"
     if os.path.exists(file_path):
-        print(parse_data(file_path))
+        return parse_data(file_path)
     else:
-        print(create_new_member(file_path, name))
+        return create_new_member(file_path, name)
 
 
 # if __name__ == "__main__":

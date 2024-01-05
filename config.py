@@ -1,3 +1,3 @@
-TOKEN = '6268343181:AAHkvjSPJZN1Xuym8TBWaDVfbg4AMnvjtMo'
+TOKEN = '6809461862:AAFqZsgFsoesya-4eKC59dxVBBICrhUyOJU'
 left_side = -5
 right_side = 15
