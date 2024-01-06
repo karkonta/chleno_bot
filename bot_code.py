@@ -68,5 +68,35 @@ def check_new_member(name):
         return create_new_member(file_path, name)
 
 
-# if __name__ == "__main__":
-#     check_new_member('artem')
+def files_list():
+    directory = "data"
+    # Получаем список файлов
+    files = os.listdir(directory)
+    files.remove('example.json')
+    return files
+
+
+def create_members_list(files):
+    result = {}
+    for file in files:
+        with open(f'data/{file}', 'r') as f:
+            parameters = json.load(f)
+        result[parameters['name']] = parameters['parameters']['length']
+    return result
+
+
+def check_top():
+    files = files_list()
+    member = create_members_list(files)
+    sorted_member = sorted(member.items(), key=lambda item: item[1], reverse=True)
+    msg = 'Топ игроков: \n'
+    count = 1
+    for i in sorted_member:
+        msg += f'{count}) {i[0]} - {i[1]} см.\n'
+        count += 1
+
+    return msg
+
+
+if __name__ == "__main__":
+    print(check_top())

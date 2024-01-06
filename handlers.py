@@ -14,9 +14,10 @@ async def start_handler(msg: Message):
 
 @router.message(Command("dick"))
 async def message_handler(msg: Message):
-    await msg.answer(f"@{msg.from_user.username}{bot_code.check_new_member(msg.from_user.username)}")
+    await msg.answer(f"@{msg.from_user.username}"
+                     f"{bot_code.check_new_member(msg.from_user.username)}")
 
 
 @router.message(Command("top"))
 async def message_handler(msg: Message):
-    await msg.answer(f"@{msg.from_user.username}{bot_code.check_new_member(msg.from_user.username)}")
+    await msg.answer(f"{bot_code.check_top()}")
