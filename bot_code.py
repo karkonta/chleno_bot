@@ -62,35 +62,41 @@ def create_new_member(file_path, name):
     return msg
 
 
-def check_new_member(id_tg, name, fullname):
-    file_path = f"data/{id_tg}.json"
+def check_new_member(id_tg, name, fullname, group_id):
+    folder_path = f"data/{abs(group_id)}"
+    file_path = f"{id_tg}.json"
+    full_path = folder_path + '/' + file_path
+    # print(full_path)
+    # file_path = f"data/{abs(group_id)}/{id_tg}.json"
     name = fullname
-    if os.path.exists(file_path):
-        return parse_data(file_path)
+    if not os.path.exists(folder_path):
+        os.makedirs(folder_path)
+    if os.path.exists(full_path):
+        return parse_data(full_path)
     else:
-        return create_new_member(file_path, name)
+        return create_new_member(full_path, name)
 
 
-def files_list():
-    directory = "data"
+def files_list(group_id):
+    directory = f"data/{abs(group_id)}"
     # Получаем список файлов
     files = os.listdir(directory)
-    files.remove('example.json')
+    # files.remove('example.json')
     return files
 
 
-def create_members_list(files):
+def create_members_list(files,group_id):
     result = {}
     for file in files:
-        with open(f'data/{file}', 'r', encoding='utf-8') as f:
+        with open(f'data/{abs(group_id)}/{file}', 'r', encoding='utf-8') as f:
             parameters = json.load(f)
         result[parameters['name']] = parameters['parameters']['length']
     return result
 
 
-def check_top():
-    files = files_list()
-    member = create_members_list(files)
+def check_top(group_id):
+    files = files_list(group_id)
+    member = create_members_list(files, group_id)
     sorted_member = sorted(member.items(), key=lambda item: item[1], reverse=True)
     msg = 'Топ игроков: \n'
     count = 1

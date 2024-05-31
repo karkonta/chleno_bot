@@ -17,6 +17,8 @@ async def message_handler(msg: Message):
     name = msg.from_user.username
     fullname = msg.from_user.full_name
     id_tg = msg.from_user.id
+    # check = msg.chat.id
+    # print(check)
     # # name = msg.from_user.mention_markdown(msg.from_user.full_name)
     # print(name)
     # print(f'{msg.from_user.id}, {msg.from_user.last_name}, {msg.from_user.first_name}')
@@ -25,9 +27,9 @@ async def message_handler(msg: Message):
     # if name is None:
     #     name = msg.from_user.mention_markdown(msg.from_user.full_name)
     await msg.reply(f"{msg.from_user.mention_markdown()}"
-                    f"{bot_code.check_new_member(id_tg, name, fullname)}", parse_mode="Markdown")
+                    f"{bot_code.check_new_member(id_tg, name, fullname, group_id=msg.chat.id)}", parse_mode="Markdown")
 
 
 @router.message(Command("top"))
 async def message_handler(msg: Message):
-    await msg.answer(f"{bot_code.check_top()}")
+    await msg.answer(f"{bot_code.check_top(group_id=msg.chat.id)}")
