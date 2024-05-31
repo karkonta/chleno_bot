@@ -7,7 +7,8 @@ from datetime import date
 
 
 def calc_length():
-    result = random.randint(config.left_side, config.right_side)
+    # result = random.randint(config.left_side, config.right_side)
+    result = random.choice([i for i in range(config.left_side, config.right_side + 1) if i != 0])
     return result
 
 
@@ -34,8 +35,8 @@ def parse_data(file_path):
     else:
         game_date = str(date.today())
         add_length = calc_length()
-        while add_length == 0:
-            add_length = calc_length()
+        # while add_length == 0:
+        #     add_length = calc_length()
 
         length = int(length) + add_length
         parameters['parameters']['length'] = length
