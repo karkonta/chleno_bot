@@ -20,12 +20,10 @@ async def message_handler(msg: Message):
 
     if msg.entities:
         for entity in msg.entities:
-            if entity.type == 'mention':
-                # The mentioned user will be in the message's chat
-                mentioned_user_id = entity.user.id  # Get the ID from the entity
-                print(f"ID of the mentioned user: {mentioned_user_id}")
-                # Now you can use mentioned_user_id as needed
-                break
+            mentioned_user_id = entity.user.id  # Get the ID from the entity
+            print(f"ID of the mentioned user: {mentioned_user_id}")
+            # Now you can use mentioned_user_id as needed
+            break
 
 
     await msg.reply(f"{msg.from_user.mention_markdown()}"
