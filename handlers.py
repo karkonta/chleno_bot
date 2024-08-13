@@ -21,6 +21,18 @@ async def message_handler(msg: Message):
     print(msg.text)
     print(msg.entities)
     print(msg.entities)
+    if msg.entities:
+        for entity in msg.entities:
+            if entity.type == 'mention':
+                # Извлекаем username из текста сообщения
+                username = msg.text[entity.offset:entity.offset + entity.length].strip('@')
+                try:
+                    # Получаем информацию о пользователе по username
+                    user = await msg.bot.get_chat(username)
+                    id_tg_mentioned = user.id  # ID упомянутого пользователя
+                    print(f"ID упомянутого пользователя: {id_tg_mentioned}")
+                except Exception as e:
+                    print(f"Ошибка при получении пользователя: {e}")
     # check = msg.chat.id
     # print(check)
     # # name = msg.from_user.mention_markdown(msg.from_user.full_name)
