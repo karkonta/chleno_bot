@@ -12,6 +12,12 @@ def calc_length():
     return result
 
 
+def calc_length_duel():
+    # result = random.randint(config.left_side, config.right_side)
+    result = random.choice([i for i in range(-config.dice, config.dice + 1) if i != 0])
+    return result
+
+
 def check_date(game_date):
     if game_date == str(date.today()):
         return True
@@ -20,7 +26,7 @@ def check_date(game_date):
 
 
 def save_to_json(parameters, file_path):
-    with open(f'{file_path}', "w") as file:
+    with open(f'{file_path}', "w", encoding='utf-8') as file:
         json.dump(parameters, file, ensure_ascii=False, indent=2, sort_keys=True)
 
 
@@ -86,7 +92,7 @@ def files_list(group_id):
     return files
 
 
-def create_members_list(files,group_id):
+def create_members_list(files, group_id):
     result = {}
     for file in files:
         with open(f'data/{abs(group_id)}/{file}', 'r', encoding='utf-8') as f:
@@ -108,5 +114,58 @@ def check_top(group_id):
     return msg
 
 
+def create_path(group_id, id_tg):
+    folder_path = f"data/{abs(group_id)}"
+    file_path = f"{id_tg}.json"
+    return folder_path + '/' + file_path
+
+
+def user_parameters(file_path):
+    with open(f'{file_path}', 'r', encoding='utf-8') as f:
+        parameters_1 = json.load(f)
+    return parameters_1, file_path
+
+
+def duel(group_id, id_tg1, id_tg2):
+    # проеврить существует ли пользователь, если не существет то необходимо выдать ошибку +
+    # проверить есть ли у того кто вызвал сегодня игра выдать ошибку в случае если играл
+    # выдать значение плюс и минус для пользователей
+    # изменить соответсвующие данные в файлах
+    # сформировать новое сообщение
+    user_list = files_list(group_id)
+    if (str(id_tg1) + '.json' and str(id_tg2) + '.json') in user_list:
+        parameters_1, file_path_1 = user_parameters(create_path(group_id, id_tg1))
+        parameters_2, file_path_2 = user_parameters(create_path(group_id, id_tg2))
+        length_1 = parameters_1['parameters']['length']
+        length_2 = parameters_2['parameters']['length']
+        game_date = parameters_1['parameters']['game_date']
+        if check_date(game_date):
+            msg = f', ты уже играл. Сейчас он равен {length_1} см. Следующая попытка завтра!'
+            return msg
+        else:
+            game_date = str(date.today())
+            add_length = calc_length_duel()
+            length_1 = int(length_1) + add_length
+            length_2 = int(length_2) - add_length
+            parameters_1['parameters']['length'] = length_1
+            parameters_2['parameters']['length'] = length_2
+            parameters_1['parameters']['game_date'] = game_date
+            save_to_json(parameters_1, file_path_1)
+            save_to_json(parameters_2, file_path_2)
+            if add_length > 0:
+                msg_1 = f', твой писюн вырос на {add_length} см. Теперь он равен {length_1} см.' \
+                      f' Следующая попытка завтра!'
+                msg_2 = f', твой писюн стал меньше на {add_length} см. Теперь он равен {length_2} см.'
+            else:
+                msg_1 = f', твой писюн стал меньше на {abs(add_length)} см. Теперь он равен {length_1} см.' \
+                      f' Следующая попытка завтра!'
+                msg_2 = f', твой писюн вырос на {abs(add_length)} см. Теперь он равен {length_2} см.'
+            return msg_1, msg_2
+    else:
+        msg = f', один из дуэлянтов еще не получил писюн.'
+        return msg
+
+
 if __name__ == "__main__":
-    print(check_top())
+    print(check_top(1001759127097))
+    print(duel(1001759127097, 59101027, 59103027))
