@@ -23,6 +23,8 @@ async def message_handler(msg: Message):
             if entity.type == 'mention':
                 # Извлекаем username из текста сообщения
                 username = msg.text[entity.offset:entity.offset + entity.length].strip('@')
+                print(username)
+                username = '@'+username
                 try:
                     # Получаем информацию о пользователе по username
                     user = await msg.bot.get_chat(username)
