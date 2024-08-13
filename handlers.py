@@ -17,7 +17,10 @@ async def message_handler(msg: Message):
     name = msg.from_user.username
     fullname = msg.from_user.full_name
     id_tg = msg.from_user.id
+    print(id_tg)
     print(msg.text)
+    print(msg.entities)
+    print(msg.entities)
     # check = msg.chat.id
     # print(check)
     # # name = msg.from_user.mention_markdown(msg.from_user.full_name)
