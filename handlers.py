@@ -21,19 +21,11 @@ async def message_handler(msg: Message):
     if msg.entities:
         for entity in msg.entities:
             if entity.type == 'mention':
-                # Извлекаем username из текста сообщения
-                username = msg.text[entity.offset:entity.offset + entity.length].strip('@')
-                print(username)
-                try:
-                    # Получаем информацию о пользователе по username
-                    user = await msg.bot.get_chat(username)
-                    id_tg_mentioned = user.id  # ID упомянутого пользователя
-                    print(f"ID упомянутого пользователя: {id_tg_mentioned}")
-                except Exception as e:
-                    print(f"Ошибка при получении пользователя: {e}")
-                    await msg.reply(
-                        "Не удалось найти упомянутого пользователя. Пожалуйста, проверьте правильность username.")
-                    return  # Завершаем выполнение функции, если произошла ошибка
+                # The mentioned user will be in the message's chat
+                mentioned_user_id = entity.user.id  # Get the ID from the entity
+                print(f"ID of the mentioned user: {mentioned_user_id}")
+                # Now you can use mentioned_user_id as needed
+                break
 
 
     await msg.reply(f"{msg.from_user.mention_markdown()}"
