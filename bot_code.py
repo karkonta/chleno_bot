@@ -31,7 +31,7 @@ def save_to_json(parameters, file_path):
 
 
 def parse_data(file_path):
-    with open(f'{file_path}', 'r') as f:
+    with open(f'{file_path}', 'r', encoding='utf-8') as f:
         parameters = json.load(f)
     length = parameters['parameters']['length']
     game_date = parameters['parameters']['game_date']
@@ -60,7 +60,7 @@ def parse_data(file_path):
 def create_new_member(file_path, name):
     name = str(name)
     example_path = "data/example.json"
-    with open(f'{example_path}', 'r') as f:
+    with open(f'{example_path}', 'r', encoding='utf-8') as f:
         parameters = json.load(f)
     parameters['name'] = str(name)
     with open(f'{file_path}', "w", encoding='utf-8') as file:
@@ -140,8 +140,9 @@ def duel(group_id, id_tg1, id_tg2):
         length_2 = parameters_2['parameters']['length']
         game_date = parameters_1['parameters']['game_date']
         if check_date(game_date):
-            msg = f', ты уже играл. Сейчас он равен {length_1} см. Следующая попытка завтра!'
-            return msg
+            msg_1 = f', ты уже играл. Сейчас он равен {length_1} см. Следующая попытка завтра!'
+            msg_2 = False
+            return msg_1, msg_2
         else:
             game_date = str(date.today())
             add_length = calc_length_duel()
@@ -162,8 +163,9 @@ def duel(group_id, id_tg1, id_tg2):
                 msg_2 = f', твой писюн вырос на {abs(add_length)} см. Теперь он равен {length_2} см.'
             return msg_1, msg_2
     else:
-        msg = f', один из дуэлянтов еще не получил писюн.'
-        return msg
+        msg_1 = f', один из дуэлянтов еще не получил писюн.'
+        msg_2 = False
+        return msg_1, msg_2
 
 
 if __name__ == "__main__":
