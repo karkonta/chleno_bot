@@ -30,9 +30,11 @@ def save_to_json(parameters, file_path):
         json.dump(parameters, file, ensure_ascii=False, indent=2, sort_keys=True)
 
 
-def parse_data(file_path):
+def parse_data(file_path, username):
     with open(f'{file_path}', 'r', encoding='utf-8') as f:
         parameters = json.load(f)
+    # TODO: удалить метод после следующего перезапуска
+    check_username(parameters, username)
     length = parameters['parameters']['length']
     game_date = parameters['parameters']['game_date']
     if check_date(game_date):
@@ -57,31 +59,38 @@ def parse_data(file_path):
         return msg
 
 
-def create_new_member(file_path, name):
+def create_new_member(file_path, name, username):
     name = str(name)
     example_path = "data/example.json"
     with open(f'{example_path}', 'r', encoding='utf-8') as f:
         parameters = json.load(f)
     parameters['name'] = str(name)
+    parameters['username'] = str(username)
     with open(f'{file_path}', "w", encoding='utf-8') as file:
         json.dump(parameters, file, ensure_ascii=False, indent=2, sort_keys=True)
     msg = f', ты получаешь новый писюн, котрый будешь растить.'
     return msg
 
 
-def check_new_member(id_tg, name, fullname, group_id):
+def check_username(parameters, username):
+    parameters['username'] = str(username)
+    return parameters
+
+
+def check_new_member(id_tg, username, fullname, group_id):
     folder_path = f"data/{abs(group_id)}"
     file_path = f"{id_tg}.json"
     full_path = folder_path + '/' + file_path
     # print(full_path)
     # file_path = f"data/{abs(group_id)}/{id_tg}.json"
-    name = fullname
+    if not username:
+        username = ""
     if not os.path.exists(folder_path):
         os.makedirs(folder_path)
     if os.path.exists(full_path):
-        return parse_data(full_path)
+        return parse_data(full_path, username)
     else:
-        return create_new_member(full_path, name)
+        return create_new_member(full_path, fullname, username)
 
 
 def files_list(group_id):
